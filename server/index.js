@@ -4,6 +4,7 @@ const app = express()
 const massive = require('massive')
 const session = require('express-session')
 const authCtrl = require('./controllers/authCtrl')
+const authenticateUser = require('./middlewares/authenticateUser')
 
 const { PORT, CONNECTION_STRING, SESSION_SECRET } = process.env
 
@@ -23,7 +24,10 @@ app.post('/auth/register', authCtrl.register)
 app.post('/auth/login', authCtrl.login)
 app.delete('/auth/logout', authCtrl.logout)
 
-app.get('/api/secret', )
+//protected routes
+app.get('/api/secret', authenticateUser, (req, res) => {
+  res.status(200).send("Here's the secret!")
+})
 
 massive({
   connectionString: CONNECTION_STRING,
